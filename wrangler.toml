@@ -1,0 +1,13 @@
+# Cloudflare configuration for bandwidth
+
+name = "bandwidth"
+compatibility_date = "2024-01-01"
+
+# Pages configuration
+# Connect this repo to Cloudflare Pages via the dashboard
+# Build command: pip install -e . && python -m src.aggregator
+# Output directory: output
+
+# Worker for cron trigger
+[triggers]
+crons = ["*/10 * * * *"]  # Every 10 minutes

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}bandwidth - news without the noise{% endblock %}
+
+{% block content %}
+<section>
+    {% for story in stories %}
+    <article>
+        <a href="/story/{{ story.id }}.html" class="article-link">
+            <h2>{{ story.title }}</h2>
+            <p class="meta">
+                <span class="source">{{ story.source }}</span>
+                <time datetime="{{ story.published|format_iso }}">{{ story.published|format_date }} at {{ story.published|format_time }}</time>
+            </p>
+        </a>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

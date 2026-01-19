@@ -1,0 +1,6 @@
+feedparser
+httpx
+pyyaml
+jinja2
+trafilatura
+lxml_html_clean

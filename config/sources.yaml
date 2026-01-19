@@ -1,0 +1,76 @@
+# bandwidth news sources
+# Open source and non-profit news organizations only
+
+sources:
+  # Non-profit / Public Media
+  # - name: NPR News
+  #   url: https://feeds.npr.org/1001/rss.xml
+  #   type: rss
+
+  # - name: PBS NewsHour
+  #   url: https://www.pbs.org/newshour/feeds/rss/headlines
+  #   type: rss
+
+  # - name: Democracy Now
+  #   url: https://www.democracynow.org/democracynow.rss
+  #   type: rss
+
+  # - name: Texas Tribune
+  #   url: https://feeds.texastribune.org/feeds/main
+
+
+  # Non-profit Investigative Journalism
+  - name: ProPublica
+    url: https://www.propublica.org/feeds/propublica/main
+    type: rss
+
+  - name: The Markup
+    url: https://themarkup.org/feeds/rss.xml
+    type: rss
+
+  - name: The Intercept
+    url: https://theintercept.com/feed/?rss
+    type: rss
+
+  - name: Center for Public Integrity
+    url: https://publicintegrity.org/feed/
+    type: rss
+
+  # Community / International Non-profit
+  - name: Global Voices
+    url: https://globalvoices.org/feed/
+    type: rss
+
+  # - name: Common Dreams
+  #   url: https://www.commondreams.org/feeds/news.rss
+  #   type: rss
+
+  - name: Truthout
+    url: https://truthout.org/feed/
+    type: rss
+
+  # Additional Non-profit Investigative
+  - name: Reveal
+    url: https://revealnews.org/feed/
+    type: rss
+
+  - name: Grist
+    url: https://grist.org/feed/
+    type: rss
+
+  - name: Inside Climate News
+    url: https://insideclimatenews.org/feed/
+    type: rss
+
+  # Open Source / Citizen Journalism
+  - name: Bellingcat
+    url: https://www.bellingcat.com/feed/
+    type: rss
+
+  - name: Wikinews
+    url: https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom
+    type: atom
+
+  - name: Nonprofit Quarterly
+    url: https://nonprofitquarterly.org/feed/
+    type: rss

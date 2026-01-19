@@ -1,0 +1,36 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Every 10 minutes
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install feedparser httpx pyyaml jinja2 trafilatura lxml_html_clean
+
+      - name: Run aggregator
+        run: python -m src.aggregator
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy output --project-name=bandwidth

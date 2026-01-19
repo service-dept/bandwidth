@@ -1,0 +1,149 @@
+/* bandwidth - minimal CSS */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    /* padding: 1rem; */
+    background-color: #000;
+    color: #fff;
+}
+
+header h1 {
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    margin-top: 0;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo {
+    font-family: monospace;
+    font-size: 1.38vw;
+    line-height: 1;
+    margin: 0;
+    white-space: pre;
+    padding: 1.38vw;
+}
+
+.logo:hover {
+    color: red;
+}
+
+header:has(.logo:hover) + main article:first-of-type {
+    border-top-color: red;
+}
+
+nav {
+    margin-bottom: 2rem;
+}
+
+nav a {
+    margin-right: 1rem;
+}
+
+article {
+    /* margin-bottom: 3rem; */
+    border-bottom: 4px solid #fff;
+    padding: .5vw 1vw 0 1vw;
+}
+
+article:first-of-type {
+    border-top: 4px solid #fff;
+}
+
+article:first-of-type:hover {
+    border-top-color: red;
+}
+
+/* article:first-of-type {
+    padding-top: 0;
+} */
+
+article h2 {
+    font-size: 6.3vw;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 5vw;
+    margin: 0 0 .5vw 0;
+    text-align: justify;
+    text-align-last: justify;
+    text-wrap: balance;
+}
+
+.article-link {
+    text-decoration: none;
+    display: block;
+}
+
+.article-link:hover h2,
+.article-link:hover .meta {
+    color: red;
+}
+
+article:hover {
+    border-bottom-color: red;
+}
+
+article:has(+ article:hover) {
+    border-bottom-color: red;
+}
+
+.meta {
+    color: #fff;
+    font-size: 3.5vw;
+    line-height: 3.5vw;
+    margin: 0 0 1vw 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-weight: 500;
+}
+
+.source {
+    /* font-weight: bold; */
+}
+
+.source::after {
+    content: none;
+}
+
+.content p {
+    font-family: georgia;
+    margin: 0 0 .5em 0;
+    font-size: 2vw;
+    line-height: 2.5vw;
+    text-wrap: unset;
+}
+
+.content p:last-child {
+    margin-bottom: 0;
+}
+
+.actions {
+    margin-top: 1rem;
+}
+
+footer {
+    color: #fff;
+    font-size: 6.3vw;
+    font-weight: 800;
+    line-height: 5vw;
+    padding: .5vw 1vw .5vw 1vw;
+    text-align: justify;
+    text-align-last: justify;
+    text-wrap: balance;
+    text-transform: uppercase;
+}
+
+a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+footer p {
+    margin: 0;
+}

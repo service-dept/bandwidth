@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ story.title }} - bandwidth{% endblock %}
+
+{% block content %}
+<article>
+    <h2>{{ story.title }}</h2>
+    <p class="meta">
+        <span class="source">{{ story.source }}</span>
+        <time datetime="{{ story.published|format_iso }}">{{ story.published|format_date }} at {{ story.published|format_time }}</time>
+    </p>
+    {% if story.content %}
+    <div class="content">
+        {{ story.content|safe }}
+    </div>
+    {% else %}
+    <p>{{ story.summary }}</p>
+    {% endif %}
+    <p class="actions">
+        <a href="{{ story.source_url }}">Read on {{ story.source }} &rarr;</a>
+    </p>
+</article>
+{% endblock %}
