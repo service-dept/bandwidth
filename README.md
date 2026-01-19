@@ -287,5 +287,3 @@ Options:
 MIT
 
 ---
-
-*bandwidth — news without the noise.*
