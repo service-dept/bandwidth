@@ -250,6 +250,15 @@ footer p {
         line-height: 2rem;
         margin: 0 10px 10px 10px;
     }
+    .logo-large {
+        display: none;
+    }
+    .logo-medium {
+        display: none;
+    }
+    .logo-small {
+        display: block;
+    }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1299px) {
@@ -281,6 +290,15 @@ footer p {
         font-size: 2.5rem;
         line-height: 2.5rem;
         margin: 0 15px 15px 15px;
+    }
+    .logo-large {
+        display: block;
+    }
+    .logo-medium {
+        display: none;
+    }
+    .logo-small {
+        display: none;
     }
 }
 
@@ -316,5 +334,14 @@ footer p {
         font-size: 3rem;
         line-height: 3rem;
         margin: 0 15px 15px 15px;
+    }
+    .logo-large {
+        display: block;
+    }
+    .logo-medium {
+        display: none;
+    }
+    .logo-small {
+        display: none;
     }
 }
