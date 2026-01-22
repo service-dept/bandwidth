@@ -3,35 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}bandwidth{% endblock %}</title>
+    <title>{% block title %}Bandwidth{% endblock %}</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <header>
-        <h1><a href="/"><pre class="logo">░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓███████▓▒░░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░
-░▒▓███████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓████████▓▒░
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░
-░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░ ░▒▓█████████████▓▒░░▒▓█▓▒░▒▓███████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░</pre></a></h1>
-        <!-- <article><h2>Brand new news every 10 minutes</h2></article> -->
-        <!-- nav hidden for now
-        <nav>
-            <a href="/">feed</a>
-            <a href="/about.html">about</a>
-            <a href="/sources.html">sources</a>
-            <a href="/support.html">support</a>
-        </nav>
-        -->
-    </header>
+    <!-- <header>{{ logo|safe }}</header> -->
+     <header>
+        <h1><a href="/"><pre class="logo" style="font-size: 2.4vw; letter-spacing: .2em; font-weight: 600;">
+BBBB    A   N   N DDDD  W   W III DDDD  TTTTT H   H
+B   B  A A  NN  N D   D W   W  I  D   D   T   H   H
+BBBB  AAAAA N N N D   D W W W  I  D   D   T   HHHHH
+B   B A   A N  NN D   D W W W  I  D   D   T   H   H
+BBBB  A   A N   N DDDD   W W  III DDDD    T   H   H
+</pre></a></h1>
+     </header>
 
     <main>
         {% block content %}{% endblock %}
     </main>
 
     <footer>
-        <p>Last updated: <time datetime="{{ updated|format_iso }}">{{ updated|format_datetime }}</time></p>
+        <a href="/about.html">Last updated: <time datetime="{{ updated|format_iso }}">{{ updated|format_datetime }}</time></a>
     </footer>
 </body>
 </html>

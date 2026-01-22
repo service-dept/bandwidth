@@ -13,6 +13,30 @@ from jinja2 import Environment, FileSystemLoader
 from .parser import Story
 
 
+def load_next_logo(static_path: str) -> str:
+    """Load the next logo in sequence from the logos directory."""
+    logos_dir = Path(static_path) / "logos"
+    logo_files = sorted(logos_dir.glob("logo-*.html"))
+    if not logo_files:
+        return "<h1><a href='/'>Bandwidth</a></h1>"
+
+    # Track which logo to use next
+    state_file = logos_dir / ".logo_index"
+    try:
+        index = int(state_file.read_text().strip())
+    except (FileNotFoundError, ValueError):
+        index = 0
+
+    # Wrap around if needed
+    index = index % len(logo_files)
+    logo_file = logo_files[index]
+
+    # Save next index
+    state_file.write_text(str((index + 1) % len(logo_files)))
+
+    return logo_file.read_text()
+
+
 def create_environment(templates_path: str) -> Environment:
     """Create Jinja2 environment."""
     env = Environment(
@@ -61,6 +85,9 @@ def generate_site(
     env = create_environment(templates_path)
     now = datetime.now(timezone.utc)
 
+    # Load next logo in sequence
+    logo = load_next_logo(static_path)
+
     # Load sources for sources page
     with open(sources_path) as f:
         sources_config = yaml.safe_load(f)
@@ -68,7 +95,7 @@ def generate_site(
 
     # Generate index.html
     template = env.get_template("index.html")
-    html = template.render(stories=stories, updated=now)
+    html = template.render(stories=stories, updated=now, logo=logo)
     (output / "index.html").write_text(html)
     print("  Generated index.html")
 
@@ -77,16 +104,15 @@ def generate_site(
     story_dir.mkdir(exist_ok=True)
     template = env.get_template("story.html")
     for story in stories:
-        html = template.render(story=story, updated=now)
+        html = template.render(story=story, updated=now, logo=logo)
         (story_dir / f"{story.id}.html").write_text(html)
     print(f"  Generated {len(stories)} story pages")
 
-    # Generate static pages
-    for page in ["about", "sources", "support"]:
-        template = env.get_template(f"{page}.html")
-        html = template.render(sources=sources, updated=now)
-        (output / f"{page}.html").write_text(html)
-        print(f"  Generated {page}.html")
+    # Generate about page
+    template = env.get_template("about.html")
+    html = template.render(sources=sources, updated=now, logo=logo)
+    (output / "about.html").write_text(html)
+    print("  Generated about.html")
 
     # Copy static files
     static = Path(static_path)

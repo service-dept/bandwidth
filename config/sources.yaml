@@ -22,23 +22,28 @@ sources:
   # Non-profit Investigative Journalism
   - name: ProPublica
     url: https://www.propublica.org/feeds/propublica/main
+    homepage: https://www.propublica.org
     type: rss
 
   - name: The Markup
     url: https://themarkup.org/feeds/rss.xml
+    homepage: https://themarkup.org
     type: rss
 
   - name: The Intercept
     url: https://theintercept.com/feed/?rss
+    homepage: https://theintercept.com
     type: rss
 
   - name: Center for Public Integrity
     url: https://publicintegrity.org/feed/
+    homepage: https://publicintegrity.org
     type: rss
 
   # Community / International Non-profit
   - name: Global Voices
     url: https://globalvoices.org/feed/
+    homepage: https://globalvoices.org
     type: rss
 
   # - name: Common Dreams
@@ -47,30 +52,37 @@ sources:
 
   - name: Truthout
     url: https://truthout.org/feed/
+    homepage: https://truthout.org
     type: rss
 
   # Additional Non-profit Investigative
   - name: Reveal
     url: https://revealnews.org/feed/
+    homepage: https://revealnews.org
     type: rss
 
   - name: Grist
     url: https://grist.org/feed/
+    homepage: https://grist.org
     type: rss
 
   - name: Inside Climate News
     url: https://insideclimatenews.org/feed/
+    homepage: https://insideclimatenews.org
     type: rss
 
   # Open Source / Citizen Journalism
   - name: Bellingcat
     url: https://www.bellingcat.com/feed/
+    homepage: https://www.bellingcat.com
     type: rss
 
   - name: Wikinews
     url: https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom
+    homepage: https://en.wikinews.org
     type: atom
 
   - name: Nonprofit Quarterly
     url: https://nonprofitquarterly.org/feed/
+    homepage: https://nonprofitquarterly.org
     type: rss

@@ -41,15 +41,30 @@ def main() -> None:
     stories = deduplicate(stories)
     print(f"  Unique: {len(stories)} stories")
 
-    # Sort and take top 50
-    print("\n4. Sorting and selecting top 50...")
+    # Sort by date
+    print("\n4. Sorting by date...")
     stories = sort_by_date(stories)
-    stories = take_top(stories, 50)
-    print(f"  Selected: {len(stories)} stories")
 
-    # Fetch full article content
+    # Fetch content and filter out empty articles, maintaining 25 stories
     print("\n5. Fetching article content...")
-    stories = asyncio.run(fetch_all_articles(stories))
+    final_stories = []
+    batch_start = 0
+    batch_size = 30  # Fetch extra to account for failures
+
+    while len(final_stories) < 25 and batch_start < len(stories):
+        batch = stories[batch_start : batch_start + batch_size]
+        batch_with_content = asyncio.run(fetch_all_articles(batch))
+
+        for story in batch_with_content:
+            if story.content:
+                final_stories.append(story)
+                if len(final_stories) >= 25:
+                    break
+
+        batch_start += batch_size
+
+    stories = final_stories
+    print(f"  Selected: {len(stories)} stories with content")
 
     # Generate site
     print("\n6. Generating site...")

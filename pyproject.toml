@@ -14,6 +14,8 @@ dependencies = [
 dev = [
     "ruff",
     "pytest",
+    "watchdog>=4.0",
+    "livereload>=2.6",
 ]
 
 [project.scripts]

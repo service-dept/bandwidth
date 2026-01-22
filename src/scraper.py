@@ -40,6 +40,9 @@ def extract_content(html: str) -> Optional[str]:
     import re
     content = re.sub(r'^<html>\s*<body>\s*', '', content)
     content = re.sub(r'\s*</body>\s*</html>\s*$', '', content)
+    # Convert heading tags to paragraphs with class for easier styling
+    content = re.sub(r'<h[1-6][^>]*>', '<p class="subheading">', content)
+    content = re.sub(r'</h[1-6]>', '</p>', content)
     return content
 
 
