@@ -98,6 +98,42 @@ async def fetch_github_regenerations(repo: str, token: str) -> int:
             return 0
 
 
+async def fetch_last_failure_date(repo: str, token: str) -> str | None:
+    """Fetch the date of the most recent failed workflow run.
+
+    Returns:
+        ISO date string of last failure, or None if no failures found.
+    """
+    if not repo or not token:
+        return None
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(
+                f"https://api.github.com/repos/{repo}/actions/workflows/deploy.yml/runs",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Accept": "application/vnd.github+json",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+                params={"per_page": 100, "status": "failure"},
+                timeout=10,
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            runs = data.get("workflow_runs", [])
+            if not runs:
+                return None
+
+            # Most recent failure is first
+            last_failure = runs[0].get("created_at")
+            return last_failure
+        except Exception as e:
+            print(f"Failed to fetch GitHub failure stats: {e}")
+            return None
+
+
 def calculate_package_size(output_path: str) -> int:
     """Calculate total size of output directory in KB."""
     output = Path(output_path)
@@ -131,6 +167,7 @@ async def collect_stats(
             "visitors": 0,
             "regenerations": 0,
             "package_size_kb": 0,
+            "days_since_incident": None,
             "last_updated": None,
             "last_visitor_fetch": None,
         }
@@ -155,6 +192,17 @@ async def collect_stats(
 
     # Calculate current package size
     stats["package_size_kb"] = calculate_package_size(output_path)
+
+    # Fetch days since last incident
+    last_failure = await fetch_last_failure_date(gh_repo, gh_token)
+    if last_failure:
+        failure_date = datetime.fromisoformat(last_failure.replace("Z", "+00:00"))
+        days = (datetime.now(timezone.utc) - failure_date).days
+        stats["days_since_incident"] = days
+        print(f"  Days since last incident: {days}")
+    else:
+        stats["days_since_incident"] = None
+        print("  No incidents recorded")
 
     # Update timestamps
     now = datetime.now(timezone.utc)

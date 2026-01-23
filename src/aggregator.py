@@ -89,6 +89,10 @@ def main() -> None:
     print(f"  Visitors: {stats['visitors']:,}")
     print(f"  Regenerations: {stats['regenerations']:,}")
     print(f"  Package size: {stats['package_size_kb']:,} KB")
+    if stats.get("days_since_incident") is not None:
+        print(f"  Days since incident: {stats['days_since_incident']}")
+    else:
+        print("  No incidents recorded")
 
     # Regenerate site with stats
     print("\n8. Regenerating site with stats...")

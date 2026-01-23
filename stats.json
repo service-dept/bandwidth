@@ -1,8 +1,8 @@
 {
   "visitors": 0,
   "regenerations": 120,
-  "stories_rendered": 75,
   "package_size_kb": 418,
+  "days_since_incident": null,
   "last_updated": "2026-01-23T15:37:01.411728+00:00",
   "last_visitor_fetch": "2026-01-23"
 }
