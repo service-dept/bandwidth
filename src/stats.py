@@ -66,6 +66,7 @@ async def fetch_cloudflare_visitors(
 async def fetch_github_regenerations(repo: str, token: str) -> int:
     """Fetch total workflow run count from GitHub Actions API."""
     if not repo or not token:
+        print(f"  GitHub stats skipped: repo={bool(repo)}, token={bool(token)}")
         return 0
 
     async with httpx.AsyncClient() as client:
@@ -141,6 +142,7 @@ async def collect_stats(
 
     # Fetch regeneration count (this is already cumulative from GitHub)
     regenerations = await fetch_github_regenerations(gh_repo, gh_token)
+    print(f"  GitHub regenerations API returned: {regenerations}")
     if regenerations > 0:
         stats["regenerations"] = regenerations
 
