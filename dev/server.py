@@ -33,7 +33,7 @@ STATIC_PATH = ROOT / "static"
 OUTPUT_PATH = ROOT / "output"
 SAMPLE_DATA_PATH = DEV_DIR / "sample_data.json"
 SOURCES_PATH = ROOT / "config" / "sources.yaml"
-STATS_PATH = ROOT / "stats.json"
+SAMPLE_STATS_PATH = DEV_DIR / "sample_stats.json"
 
 
 @dataclass
@@ -75,10 +75,10 @@ def load_sample_data() -> tuple[list[Story], list[dict], dict]:
         sources_config = yaml.safe_load(f)
     sources = sources_config.get("sources", [])
 
-    # Load stats if available
+    # Load sample stats for dev server
     stats = None
-    if STATS_PATH.exists():
-        with open(STATS_PATH) as f:
+    if SAMPLE_STATS_PATH.exists():
+        with open(SAMPLE_STATS_PATH) as f:
             stats = json.load(f)
 
     return stories, sources, stats

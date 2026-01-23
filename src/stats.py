@@ -179,10 +179,14 @@ async def collect_stats(
         Updated stats dictionary
     """
     # TODO: Add defensive parsing; corrupted stats.json currently crashes the run
-    # Load existing stats
+    # Load existing stats, falling back to seed file if stats.json doesn't exist
     stats_file = Path(stats_path)
+    seed_file = stats_file.parent / "config" / "stats.seed.json"
+
     if stats_file.exists():
         stats = json.loads(stats_file.read_text())
+    elif seed_file.exists():
+        stats = json.loads(seed_file.read_text())
     else:
         stats = {
             "pageviews": 0,
