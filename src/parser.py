@@ -7,7 +7,7 @@ import html
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import List
+from typing import Any
 
 import feedparser
 
@@ -47,7 +47,7 @@ def truncate(text: str, max_length: int = 280) -> str:
     return truncated + "..."
 
 
-def parse_date(entry: dict) -> datetime:
+def parse_date(entry: dict[str, Any]) -> datetime:
     """Parse publication date from feed entry."""
     if hasattr(entry, "published_parsed") and entry.published_parsed:
         return datetime(*entry.published_parsed[:6], tzinfo=timezone.utc)
@@ -61,7 +61,7 @@ def generate_id(url: str) -> str:
     return hashlib.sha256(url.encode()).hexdigest()[:12]
 
 
-def parse_feed(feed_result: FeedResult) -> List[Story]:
+def parse_feed(feed_result: FeedResult) -> list[Story]:
     """Parse a single feed result into stories."""
     if not feed_result.content:
         return []
@@ -98,7 +98,7 @@ def parse_feed(feed_result: FeedResult) -> List[Story]:
     return stories
 
 
-def parse_all_feeds(feed_results: List[FeedResult]) -> List[Story]:
+def parse_all_feeds(feed_results: list[FeedResult]) -> list[Story]:
     """Parse all feed results into stories."""
     all_stories = []
     for result in feed_results:

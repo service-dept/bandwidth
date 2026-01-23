@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
-from typing import Optional, List
 
 import httpx
 import yaml
@@ -16,8 +15,8 @@ class FeedResult:
 
     name: str
     url: str
-    content: Optional[str]
-    error: Optional[str] = None
+    content: str | None
+    error: str | None = None
 
 
 async def fetch_feed(client: httpx.AsyncClient, name: str, url: str) -> FeedResult:
@@ -34,13 +33,14 @@ async def fetch_feed(client: httpx.AsyncClient, name: str, url: str) -> FeedResu
         return FeedResult(name=name, url=url, content=None, error=str(e))
 
 
-async def fetch_all_feeds(sources_path: str) -> List[FeedResult]:
+async def fetch_all_feeds(sources_path: str) -> list[FeedResult]:
     """Fetch all RSS feeds from sources config."""
     with open(sources_path) as f:
         config = yaml.safe_load(f)
 
     sources = config.get("sources", [])
 
+    # TODO: Validate required fields (name, url) to avoid KeyError crashes
     async with httpx.AsyncClient(timeout=5.0) as client:
         tasks = [
             fetch_feed(client, source["name"], source["url"])

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from typing import List, Optional
 
 import httpx
 import trafilatura
@@ -12,7 +11,7 @@ import trafilatura
 from .parser import Story
 
 
-async def fetch_article_html(client: httpx.AsyncClient, url: str) -> Optional[str]:
+async def fetch_article_html(client: httpx.AsyncClient, url: str) -> str | None:
     """Fetch raw HTML from article URL."""
     try:
         response = await client.get(url, follow_redirects=True)
@@ -22,7 +21,7 @@ async def fetch_article_html(client: httpx.AsyncClient, url: str) -> Optional[st
         return None
 
 
-def extract_content(html: str) -> Optional[str]:
+def extract_content(html: str) -> str | None:
     """Extract main article content from HTML using trafilatura."""
     if not html:
         return None
@@ -50,7 +49,7 @@ async def fetch_article_content(
     client: httpx.AsyncClient,
     executor: ThreadPoolExecutor,
     story: Story,
-) -> Optional[str]:
+) -> str | None:
     """Fetch and extract article content for a single story."""
     try:
         html = await fetch_article_html(client, story.source_url)
@@ -65,7 +64,7 @@ async def fetch_article_content(
         return None
 
 
-async def fetch_all_articles(stories: List[Story]) -> List[Story]:
+async def fetch_all_articles(stories: list[Story]) -> list[Story]:
     """Fetch full article content for all stories."""
     # TODO: Add semaphore to limit concurrent connections and prevent memory spikes
     # Use thread pool for CPU-bound trafilatura extraction

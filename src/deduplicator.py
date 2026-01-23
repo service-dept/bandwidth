@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-from typing import List, Set
 
 from .parser import Story
 
 
-def deduplicate(stories: List[Story]) -> List[Story]:
+def deduplicate(stories: list[Story]) -> list[Story]:
     """Remove duplicate stories based on URL hash (id)."""
-    seen_ids: Set[str] = set()
-    unique_stories: List[Story] = []
+    seen_ids: set[str] = set()
+    unique_stories: list[Story] = []
 
     for story in stories:
         if story.id not in seen_ids:
@@ -24,11 +23,11 @@ def deduplicate(stories: List[Story]) -> List[Story]:
     return unique_stories
 
 
-def sort_by_date(stories: List[Story]) -> List[Story]:
+def sort_by_date(stories: list[Story]) -> list[Story]:
     """Sort stories by publication date, newest first."""
     return sorted(stories, key=lambda s: s.published, reverse=True)
 
 
-def take_top(stories: List[Story], n: int = 25) -> List[Story]:
+def take_top(stories: list[Story], n: int = 25) -> list[Story]:
     """Return the top N stories (assumes already sorted by date)."""
     return stories[:n]

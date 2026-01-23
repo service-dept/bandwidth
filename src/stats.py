@@ -61,6 +61,7 @@ async def fetch_cloudflare_visitors(
                 print(f"  Cloudflare returned no zones (check zone_id)")
                 return 0
 
+            # TODO: This sums daily uniques which overcounts true unique visitors
             total = 0
             for group in zones[0].get("httpRequests1dGroups", []):
                 total += group.get("uniq", {}).get("uniques", 0)
@@ -122,6 +123,7 @@ async def collect_stats(
     Returns:
         Updated stats dictionary
     """
+    # TODO: Add defensive parsing; corrupted stats.json currently crashes the run
     # Load existing stats
     stats_file = Path(stats_path)
     if stats_file.exists():

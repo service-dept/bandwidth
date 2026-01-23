@@ -5,7 +5,6 @@ from __future__ import annotations
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List
 
 import yaml
 from jinja2 import Environment, FileSystemLoader
@@ -65,7 +64,7 @@ def create_environment(templates_path: str) -> Environment:
 
 
 def generate_site(
-    stories: List[Story],
+    stories: list[Story],
     templates_path: str,
     static_path: str,
     output_path: str,
@@ -89,6 +88,7 @@ def generate_site(
     # Load next logo in sequence
     logo = load_next_logo(static_path)
 
+    # TODO: Validate required fields (name, homepage) to avoid KeyError crashes
     # Load sources for sources page
     with open(sources_path) as f:
         sources_config = yaml.safe_load(f)
