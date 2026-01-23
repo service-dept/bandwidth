@@ -138,18 +138,22 @@ article:has(+ article:hover) {
     text-transform: capitalize;
 }
 
+/* .stats-list::before {
+    content: "↳";
+} */
+
 .stats-list li {
     display: inline;
     margin: 0;
 }
 
-.stats-list li::after {
+/* .stats-list li::after {
     content: " / ";
 }
 
 .stats-list li:last-of-type::after {
     content: "";
-}
+} */
 
 .source::after {
     content: none;
@@ -342,8 +346,8 @@ footer p {
         line-height: 3rem;
     }
     .content {
-        font-size: 3rem;
-        line-height: 3rem;
+        font-size: 3.5rem;
+        line-height: 3.5rem;
         padding: 15px;
         border-top: 4px solid #fff;
     }

@@ -4,17 +4,18 @@
 
 {% block content %}
 <article class="content">
-    <p>Bandwidth is a text-based aggregator for non-profit and open-source news.  No client-side JavaScript, images, cookies, or tracking pixels to be found. WYSIWYG.</p>
-        
-    <p>Here's how it works: every 10 minutes, a cron job triggers a series of Python scripts that scrape, dedupe, and collate the latest 25 news stories from a curated collection of RSS feeds and public APIs. Another Python script transforms that scraped data into a small (~500K) payload of pure HTML and CSS and uploads it to a server.</p>
+    <p>...is a data-accessible news aggregator featuring only the most trusted independent, non-profit, and open-source publishers. We collect no personal information, usage patterns, or identifying data. We use no client-side JavaScript, images, cookies, or tracking pixels. W.Y.S.I.W.Y.G.</p>
 
     {% if stats %}
-    <ul class="stats-list">
-        <li>{{ "{:,}".format(stats.pageviews) }} total pageviews</li>
-        <li>{{ "{:,}".format(stats.regenerations) }} regenerations</li>
-        <li>{% if stats.days_since_incident is not none %}{{ stats.days_since_incident }} days since last incident{% else %}no incidents recorded{% endif %}</li>
-    </ul>
+        <ul class="stats-list">
+            <li>✿ {{ "{:,}".format(stats.pageviews) }} pageviews ☘</li>
+            <li>{{ "{:,}".format(stats.regenerations) }} regenerations <span style="font-size: .8em;">♻</span></li>
+            <li>{{ sources|length }} ingested news sources ⚘</li>
+            <li>{% if stats.days_since_incident is not none %}{{ stats.days_since_incident }} days since last incident{% else %}no incidents recorded{% endif %} ✝</li>
+        </ul>
     {% endif %}
+        
+    <p>Here's how it works: every 10 minutes, a cron job triggers a series of Python scripts that scrape, dedupe, and collate the latest 25 news stories from a curated collection of RSS feeds and public APIs. Another Python script transforms that scraped data into a small (~500K) payload of pure HTML and CSS and uploads it to a server.</p>
 
     <ul class="source-list">
         {% for source in sources %}
