@@ -13,6 +13,7 @@ async def fetch_cloudflare_visitors(
 ) -> int:
     """Fetch unique visitors from Cloudflare GraphQL Analytics API."""
     if not zone_id or not api_token:
+        print(f"  Cloudflare stats skipped: zone_id={bool(zone_id)}, token={bool(api_token)}")
         return 0
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -49,14 +50,21 @@ async def fetch_cloudflare_visitors(
             response.raise_for_status()
             data = response.json()
 
+            # Check for errors in response
+            if "errors" in data and data["errors"]:
+                print(f"  Cloudflare API errors: {data['errors']}")
+                return 0
+
             # Sum up unique visitors from all days
             zones = data.get("data", {}).get("viewer", {}).get("zones", [])
             if not zones:
+                print(f"  Cloudflare returned no zones (check zone_id)")
                 return 0
 
             total = 0
             for group in zones[0].get("httpRequests1dGroups", []):
                 total += group.get("uniq", {}).get("uniques", 0)
+            print(f"  Cloudflare visitors from {since_date} to {today}: {total}")
             return total
         except Exception as e:
             print(f"Failed to fetch Cloudflare stats: {e}")
