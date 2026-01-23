@@ -16,17 +16,23 @@ async def fetch_cloudflare_pageviews(
         print(f"  Cloudflare stats skipped: zone_id={bool(zone_id)}, token={bool(api_token)}")
         return 0
 
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # Query up to yesterday (today's data is incomplete)
+    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
     # If no previous fetch, start from 30 days ago (max retention)
     if not since_date:
         since_date = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
+
+    # Skip if we've already fetched up to yesterday
+    if since_date >= yesterday:
+        print(f"  Cloudflare stats: already fetched up to {since_date}, skipping")
+        return 0
 
     query = """
     query {
       viewer {
         zones(filter: { zoneTag: "%s" }) {
           httpRequests1dGroups(
-            filter: { date_geq: "%s", date_lt: "%s" }
+            filter: { date_geq: "%s", date_leq: "%s" }
             limit: 100
           ) {
             sum { requests pageViews }
@@ -34,7 +40,7 @@ async def fetch_cloudflare_pageviews(
         }
       }
     }
-    """ % (zone_id, since_date, today)
+    """ % (zone_id, since_date, yesterday)
 
     async with httpx.AsyncClient() as client:
         try:
@@ -80,7 +86,7 @@ async def fetch_cloudflare_pageviews(
                     total += page_views
                 else:
                     total += requests
-            print(f"  Cloudflare pageviews from {since_date} to {today}: {total}")
+            print(f"  Cloudflare pageviews from {since_date} to {yesterday}: {total}")
             return total
         except Exception as e:
             print(f"Failed to fetch Cloudflare stats: {e}")
@@ -194,10 +200,13 @@ async def collect_stats(
     gh_repo = os.environ.get("GITHUB_REPOSITORY", "")
 
     # Fetch new pageviews and add to cumulative total
+    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
     new_pageviews = await fetch_cloudflare_pageviews(
         cf_zone_id, cf_api_token, stats.get("last_pageview_fetch")
     )
-    stats["pageviews"] = stats.get("pageviews", 0) + new_pageviews
+    if new_pageviews > 0:
+        stats["pageviews"] = stats.get("pageviews", 0) + new_pageviews
+        stats["last_pageview_fetch"] = yesterday  # Mark last complete day fetched
 
     # Fetch regeneration count (this is already cumulative from GitHub)
     regenerations = await fetch_github_regenerations(gh_repo, gh_token)
@@ -222,7 +231,6 @@ async def collect_stats(
     # Update timestamps
     now = datetime.now(timezone.utc)
     stats["last_updated"] = now.isoformat()
-    stats["last_pageview_fetch"] = now.strftime("%Y-%m-%d")
 
     # Save updated stats
     stats_file.write_text(json.dumps(stats, indent=2) + "\n")
