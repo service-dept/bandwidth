@@ -14,9 +14,10 @@ from src.scraper import fetch_all_articles
 
 def main() -> None:
     """Export stories to sample_data.json."""
-    root = Path(__file__).parent
+    dev_dir = Path(__file__).parent
+    root = dev_dir.parent
     sources_path = root / "config" / "sources.yaml"
-    output_path = root / "sample_data.json"
+    output_path = dev_dir / "sample_data.json"
 
     print("Exporting to sample_data.json...")
     print("=" * 40)

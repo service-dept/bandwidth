@@ -4,7 +4,7 @@ Local development server with hot reload.
 
 Usage:
     pip install -e ".[dev]"
-    python dev.py
+    python dev/server.py
 
 Opens http://localhost:8000 with live reload on template/CSS changes.
 """
@@ -26,11 +26,12 @@ from jinja2 import Environment, FileSystemLoader
 from livereload import Server
 
 # Paths
-ROOT = Path(__file__).parent
+DEV_DIR = Path(__file__).parent
+ROOT = DEV_DIR.parent
 TEMPLATES_PATH = ROOT / "templates"
 STATIC_PATH = ROOT / "static"
 OUTPUT_PATH = ROOT / "output"
-SAMPLE_DATA_PATH = ROOT / "sample_data.json"
+SAMPLE_DATA_PATH = DEV_DIR / "sample_data.json"
 SOURCES_PATH = ROOT / "config" / "sources.yaml"
 STATS_PATH = ROOT / "stats.json"
 
@@ -203,7 +204,7 @@ def kill_existing_dev_server(port: int = 8000) -> bool:
                     capture_output=True,
                     text=True,
                 )
-                if "dev.py" in cmd_result.stdout:
+                if "dev/server.py" in cmd_result.stdout or "dev.py" in cmd_result.stdout:
                     os.kill(int(pid), signal.SIGTERM)
                     print(f"  Killed existing dev server (PID {pid})")
                     return True

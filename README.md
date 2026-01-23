@@ -32,11 +32,12 @@ bandwidth/
 ├── config/
 │   └── sources.yaml            # RSS feed configuration
 ├── output/                     # Generated site (gitignored)
+├── dev/                        # Local development tools
+│   ├── server.py               # Dev server with hot reload
+│   ├── export_sample.py        # Export live data for local dev
+│   └── sample_data.json        # Cached data for dev server
 ├── .github/workflows/
 │   └── deploy.yml              # CI/CD workflow
-├── dev.py                      # Local dev server with hot reload
-├── export_sample_data.py       # Export live data for local dev
-└── sample_data.json            # Cached data for dev server
 ```
 
 ## Pipeline
@@ -186,18 +187,18 @@ pip install livereload watchdog  # dev dependencies
 ### Dev Server
 
 ```bash
-python dev.py
+python dev/server.py
 ```
 
-Opens http://localhost:8000 with hot reload. Uses `sample_data.json` instead of fetching live feeds. Watches templates, static files, and sample data for changes.
+Opens http://localhost:8000 with hot reload. Uses `dev/sample_data.json` instead of fetching live feeds. Watches templates, static files, and sample data for changes.
 
 ### Refresh Sample Data
 
 ```bash
-python export_sample_data.py
+python dev/export_sample.py
 ```
 
-Fetches live feeds and exports to `sample_data.json`. Run this periodically to get fresh content for local development.
+Fetches live feeds and exports to `dev/sample_data.json`. Run this periodically to get fresh content for local development.
 
 ### Run Full Pipeline Locally
 
