@@ -2,7 +2,7 @@
 
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import httpx
@@ -18,9 +18,7 @@ async def fetch_cloudflare_visitors(
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     # If no previous fetch, start from 30 days ago (max retention)
     if not since_date:
-        since = datetime.now(timezone.utc)
-        since_date = (since.replace(day=since.day - 30) if since.day > 30
-                      else since.replace(month=since.month - 1, day=1)).strftime("%Y-%m-%d")
+        since_date = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
 
     query = """
     query {
