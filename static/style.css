@@ -125,6 +125,7 @@ article:has(+ article:hover) {
 
 .source-list a {
     text-decoration-thickness: 4px;
+    text-underline-offset: 6px;
 }
 
 .source-list a:hover {
@@ -134,6 +135,7 @@ article:has(+ article:hover) {
 .stats-list {
     padding: 0;
     margin: 0 0 .5em 0;
+    text-transform: capitalize;
 }
 
 .stats-list li {
@@ -142,7 +144,7 @@ article:has(+ article:hover) {
 }
 
 .stats-list li::after {
-    content: " · ";
+    content: " / ";
 }
 
 .stats-list li:last-of-type::after {
