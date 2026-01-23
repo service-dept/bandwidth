@@ -52,18 +52,22 @@ async def fetch_article_content(
     story: Story,
 ) -> Optional[str]:
     """Fetch and extract article content for a single story."""
-    html = await fetch_article_html(client, story.source_url)
-    if not html:
-        return None
+    try:
+        html = await fetch_article_html(client, story.source_url)
+        if not html:
+            return None
 
-    # Run trafilatura in thread pool (it's CPU-bound)
-    loop = asyncio.get_event_loop()
-    content = await loop.run_in_executor(executor, extract_content, html)
-    return content
+        # Run trafilatura in thread pool (it's CPU-bound)
+        loop = asyncio.get_running_loop()
+        content = await loop.run_in_executor(executor, extract_content, html)
+        return content
+    except Exception:
+        return None
 
 
 async def fetch_all_articles(stories: List[Story]) -> List[Story]:
     """Fetch full article content for all stories."""
+    # TODO: Add semaphore to limit concurrent connections and prevent memory spikes
     # Use thread pool for CPU-bound trafilatura extraction
     executor = ThreadPoolExecutor(max_workers=8)
 
@@ -72,7 +76,10 @@ async def fetch_all_articles(stories: List[Story]) -> List[Story]:
             fetch_article_content(client, executor, story)
             for story in stories
         ]
-        contents = await asyncio.gather(*tasks)
+        contents = await asyncio.gather(*tasks, return_exceptions=True)
+
+    # Convert exceptions to None
+    contents = [None if isinstance(c, Exception) else c for c in contents]
 
     executor.shutdown(wait=False)
 
