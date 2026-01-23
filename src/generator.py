@@ -70,6 +70,7 @@ def generate_site(
     static_path: str,
     output_path: str,
     sources_path: str,
+    stats: dict | None = None,
 ) -> None:
     """Generate the complete static site."""
     output = Path(output_path)
@@ -95,7 +96,7 @@ def generate_site(
 
     # Generate index.html
     template = env.get_template("index.html")
-    html = template.render(stories=stories, updated=now, logo=logo)
+    html = template.render(stories=stories, updated=now, logo=logo, stats=stats)
     (output / "index.html").write_text(html)
     print("  Generated index.html")
 
@@ -104,13 +105,13 @@ def generate_site(
     story_dir.mkdir(exist_ok=True)
     template = env.get_template("story.html")
     for story in stories:
-        html = template.render(story=story, updated=now, logo=logo)
+        html = template.render(story=story, updated=now, logo=logo, stats=stats)
         (story_dir / f"{story.id}.html").write_text(html)
     print(f"  Generated {len(stories)} story pages")
 
     # Generate about page
     template = env.get_template("about.html")
-    html = template.render(sources=sources, updated=now, logo=logo)
+    html = template.render(sources=sources, updated=now, logo=logo, stats=stats)
     (output / "about.html").write_text(html)
     print("  Generated about.html")
 

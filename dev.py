@@ -12,7 +12,11 @@ Opens http://localhost:8000 with live reload on template/CSS changes.
 from __future__ import annotations
 
 import json
+import os
 import shutil
+import signal
+import socket
+import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +32,7 @@ STATIC_PATH = ROOT / "static"
 OUTPUT_PATH = ROOT / "output"
 SAMPLE_DATA_PATH = ROOT / "sample_data.json"
 SOURCES_PATH = ROOT / "config" / "sources.yaml"
+STATS_PATH = ROOT / "stats.json"
 
 
 @dataclass
@@ -44,8 +49,8 @@ class Story:
     content: str = ""
 
 
-def load_sample_data() -> tuple[list[Story], list[dict]]:
-    """Load sample stories from JSON and sources from YAML."""
+def load_sample_data() -> tuple[list[Story], list[dict], dict]:
+    """Load sample stories from JSON, sources from YAML, and stats."""
     with open(SAMPLE_DATA_PATH) as f:
         data = json.load(f)
 
@@ -69,7 +74,13 @@ def load_sample_data() -> tuple[list[Story], list[dict]]:
         sources_config = yaml.safe_load(f)
     sources = sources_config.get("sources", [])
 
-    return stories, sources
+    # Load stats if available
+    stats = None
+    if STATS_PATH.exists():
+        with open(STATS_PATH) as f:
+            stats = json.load(f)
+
+    return stories, sources, stats
 
 
 def create_environment() -> Environment:
@@ -134,14 +145,14 @@ def generate_site() -> None:
         else:
             item.unlink()
 
-    stories, sources = load_sample_data()
+    stories, sources, stats = load_sample_data()
     env = create_environment()
     now = datetime.now(timezone.utc)
     logo = load_next_logo()
 
     # Generate index.html
     template = env.get_template("index.html")
-    html = template.render(stories=stories, updated=now, logo=logo)
+    html = template.render(stories=stories, updated=now, logo=logo, stats=stats)
     (OUTPUT_PATH / "index.html").write_text(html)
     print("  Generated index.html")
 
@@ -150,7 +161,7 @@ def generate_site() -> None:
     story_dir.mkdir(exist_ok=True)
     template = env.get_template("story.html")
     for story in stories:
-        html = template.render(story=story, updated=now, logo=logo)
+        html = template.render(story=story, updated=now, logo=logo, stats=stats)
         (story_dir / f"{story.id}.html").write_text(html)
     print(f"  Generated {len(stories)} story pages")
 
@@ -159,7 +170,7 @@ def generate_site() -> None:
         template_file = TEMPLATES_PATH / f"{page}.html"
         if template_file.exists():
             template = env.get_template(f"{page}.html")
-            html = template.render(sources=sources, updated=now, logo=logo)
+            html = template.render(sources=sources, updated=now, logo=logo, stats=stats)
             (OUTPUT_PATH / f"{page}.html").write_text(html)
             print(f"  Generated {page}.html")
 
@@ -171,14 +182,52 @@ def generate_site() -> None:
         print("  Copied static files")
 
 
+def kill_existing_dev_server(port: int = 8000) -> bool:
+    """Kill any existing dev.py process using the specified port."""
+    try:
+        # Find process using the port
+        result = subprocess.run(
+            ["lsof", "-ti", f":{port}"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0 or not result.stdout.strip():
+            return False
+
+        pids = result.stdout.strip().split("\n")
+        for pid in pids:
+            # Check if it's a python dev.py process
+            try:
+                cmd_result = subprocess.run(
+                    ["ps", "-p", pid, "-o", "command="],
+                    capture_output=True,
+                    text=True,
+                )
+                if "dev.py" in cmd_result.stdout:
+                    os.kill(int(pid), signal.SIGTERM)
+                    print(f"  Killed existing dev server (PID {pid})")
+                    return True
+            except (ProcessLookupError, ValueError):
+                continue
+        return False
+    except FileNotFoundError:
+        # lsof not available
+        return False
+
+
 def main():
     """Start the development server."""
     print("Bandwidth Dev Server")
     print("=" * 40)
 
+    # Kill any existing dev server on port 8000
+    kill_existing_dev_server(8000)
+
     # Initial build
     print("\nBuilding site...")
     generate_site()
+
+    port = 8000
 
     # Create livereload server
     server = Server()
@@ -200,12 +249,12 @@ def main():
 
     StaticFileHandler.get = regenerating_get
 
-    print(f"\nServing {OUTPUT_PATH}/ at http://localhost:8000")
+    print(f"\nServing {OUTPUT_PATH}/ at http://localhost:{port}")
     print("Watching for changes in templates/, static/, and config/")
     print("Press Ctrl+C to stop\n")
 
     # Serve output directory with live reload
-    server.serve(root=str(OUTPUT_PATH), port=8000, open_url_delay=1)
+    server.serve(root=str(OUTPUT_PATH), port=port, open_url_delay=1)
 
 
 if __name__ == "__main__":

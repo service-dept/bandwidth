@@ -131,6 +131,24 @@ article:has(+ article:hover) {
     text-decoration: none;
 }
 
+.stats-list {
+    padding: 0;
+    margin: 0 0 .5em 0;
+}
+
+.stats-list li {
+    display: inline;
+    margin: 0;
+}
+
+.stats-list li::after {
+    content: " · ";
+}
+
+.stats-list li:last-of-type::after {
+    content: "";
+}
+
 .source::after {
     content: none;
 }

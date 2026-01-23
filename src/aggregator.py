@@ -8,6 +8,7 @@ from .fetcher import fetch_all_feeds
 from .generator import generate_site
 from .parser import parse_all_feeds
 from .scraper import fetch_all_articles
+from .stats import collect_stats
 
 
 def get_project_root() -> Path:
@@ -23,6 +24,7 @@ def main() -> None:
     templates_path = root / "templates"
     static_path = root / "static"
     output_path = root / "output"
+    stats_path = root / "stats.json"
 
     print("bandwidth aggregator")
     print("=" * 40)
@@ -66,7 +68,7 @@ def main() -> None:
     stories = final_stories
     print(f"  Selected: {len(stories)} stories with content")
 
-    # Generate site
+    # Generate site (first pass without stats to get package size)
     print("\n6. Generating site...")
     generate_site(
         stories=stories,
@@ -74,6 +76,31 @@ def main() -> None:
         static_path=str(static_path),
         output_path=str(output_path),
         sources_path=str(sources_path),
+    )
+
+    # Collect and update stats
+    print("\n7. Collecting stats...")
+    stats = asyncio.run(
+        collect_stats(
+            output_path=str(output_path),
+            stats_path=str(stats_path),
+            stories_count=len(stories),
+        )
+    )
+    print(f"  Visitors: {stats['visitors']:,}")
+    print(f"  Regenerations: {stats['regenerations']:,}")
+    print(f"  Stories rendered: {stats['stories_rendered']:,}")
+    print(f"  Package size: {stats['package_size_kb']:,} KB")
+
+    # Regenerate site with stats
+    print("\n8. Regenerating site with stats...")
+    generate_site(
+        stories=stories,
+        templates_path=str(templates_path),
+        static_path=str(static_path),
+        output_path=str(output_path),
+        sources_path=str(sources_path),
+        stats=stats,
     )
 
     print("\n" + "=" * 40)

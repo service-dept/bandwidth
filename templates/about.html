@@ -18,6 +18,15 @@
 
     <p>Another Python script transforms that scraped data into a small (&lt;500K) payload of pure HTML and CSS and uploads it to a server.</p>
 
+    {% if stats %}
+    <ul class="stats-list">
+        <li><strong>{{ "{:,}".format(stats.visitors) }}</strong> visitors</li>
+        <li><strong>{{ "{:,}".format(stats.regenerations) }}</strong> regenerations</li>
+        <li><strong>{{ "{:,}".format(stats.stories_rendered) }}</strong> stories rendered</li>
+        <li><strong>{{ stats.package_size_kb }}KB</strong> last package size</li>
+    </ul>
+    {% endif %}
+
     <p>Want to file a complaint? Suggest a source? Report a bug? Send a message to admin@bandwidth.click and we'll get back to you in the order your call was received.</p>
 <pre class="logo" style="font-size: 1.8vw; text-align: left; line-height: 1em; letter-spacing: -.15em; font-weight: 300; text-align: center;">
   _                                   .-.                     _                                   .-.                
