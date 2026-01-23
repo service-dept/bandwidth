@@ -1,6 +1,9 @@
 # Output
 output/
 
+# Logo state
+static/logos/.logo_index
+
 # Python
 __pycache__/
 *.py[cod]
