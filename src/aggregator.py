@@ -84,12 +84,10 @@ def main() -> None:
         collect_stats(
             output_path=str(output_path),
             stats_path=str(stats_path),
-            stories_count=len(stories),
         )
     )
     print(f"  Visitors: {stats['visitors']:,}")
     print(f"  Regenerations: {stats['regenerations']:,}")
-    print(f"  Stories rendered: {stats['stories_rendered']:,}")
     print(f"  Package size: {stats['package_size_kb']:,} KB")
 
     # Regenerate site with stats

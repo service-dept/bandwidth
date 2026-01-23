@@ -111,14 +111,12 @@ def calculate_package_size(output_path: str) -> int:
 async def collect_stats(
     output_path: str,
     stats_path: str,
-    stories_count: int = 25,
 ) -> dict:
     """Collect and update cumulative statistics.
 
     Args:
         output_path: Path to the generated output directory
         stats_path: Path to stats.json file
-        stories_count: Number of stories rendered this build
 
     Returns:
         Updated stats dictionary
@@ -132,7 +130,6 @@ async def collect_stats(
         stats = {
             "visitors": 0,
             "regenerations": 0,
-            "stories_rendered": 0,
             "package_size_kb": 0,
             "last_updated": None,
             "last_visitor_fetch": None,
@@ -155,9 +152,6 @@ async def collect_stats(
     print(f"  GitHub regenerations API returned: {regenerations}")
     if regenerations > 0:
         stats["regenerations"] = regenerations
-
-    # Increment stories rendered
-    stats["stories_rendered"] += stories_count
 
     # Calculate current package size
     stats["package_size_kb"] = calculate_package_size(output_path)
