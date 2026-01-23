@@ -50,6 +50,9 @@ async def fetch_cloudflare_pageviews(
             response.raise_for_status()
             data = response.json()
 
+            # Debug: print raw response structure
+            print(f"  Cloudflare API response keys: {data.keys()}")
+
             # Check for errors in response
             if "errors" in data and data["errors"]:
                 print(f"  Cloudflare API errors: {data['errors']}")
@@ -58,16 +61,25 @@ async def fetch_cloudflare_pageviews(
             zones = data.get("data", {}).get("viewer", {}).get("zones", [])
             if not zones:
                 print(f"  Cloudflare returned no zones (check zone_id)")
+                print(f"  Full response: {data}")
                 return 0
 
+            # Debug: print zone data structure
+            groups = zones[0].get("httpRequests1dGroups", [])
+            print(f"  Cloudflare returned {len(groups)} day(s) of data")
+            if groups:
+                print(f"  Sample group data: {groups[0]}")
+
             total = 0
-            for group in zones[0].get("httpRequests1dGroups", []):
+            for group in groups:
                 # Use pageViews if available, fall back to requests
-                page_views = group.get("sum", {}).get("pageViews", 0)
+                sum_data = group.get("sum", {})
+                page_views = sum_data.get("pageViews", 0)
+                requests = sum_data.get("requests", 0)
                 if page_views:
                     total += page_views
                 else:
-                    total += group.get("sum", {}).get("requests", 0)
+                    total += requests
             print(f"  Cloudflare pageviews from {since_date} to {today}: {total}")
             return total
         except Exception as e:
