@@ -8,10 +8,10 @@ from pathlib import Path
 import httpx
 
 
-async def fetch_cloudflare_visitors(
+async def fetch_cloudflare_pageviews(
     zone_id: str, api_token: str, since_date: str | None
 ) -> int:
-    """Fetch unique visitors from Cloudflare GraphQL Analytics API."""
+    """Fetch total pageviews from Cloudflare GraphQL Analytics API."""
     if not zone_id or not api_token:
         print(f"  Cloudflare stats skipped: zone_id={bool(zone_id)}, token={bool(api_token)}")
         return 0
@@ -29,7 +29,7 @@ async def fetch_cloudflare_visitors(
             filter: { date_geq: "%s", date_lt: "%s" }
             limit: 100
           ) {
-            uniq { uniques }
+            sum { requests pageViews }
           }
         }
       }
@@ -55,17 +55,20 @@ async def fetch_cloudflare_visitors(
                 print(f"  Cloudflare API errors: {data['errors']}")
                 return 0
 
-            # Sum up unique visitors from all days
             zones = data.get("data", {}).get("viewer", {}).get("zones", [])
             if not zones:
                 print(f"  Cloudflare returned no zones (check zone_id)")
                 return 0
 
-            # TODO: This sums daily uniques which overcounts true unique visitors
             total = 0
             for group in zones[0].get("httpRequests1dGroups", []):
-                total += group.get("uniq", {}).get("uniques", 0)
-            print(f"  Cloudflare visitors from {since_date} to {today}: {total}")
+                # Use pageViews if available, fall back to requests
+                page_views = group.get("sum", {}).get("pageViews", 0)
+                if page_views:
+                    total += page_views
+                else:
+                    total += group.get("sum", {}).get("requests", 0)
+            print(f"  Cloudflare pageviews from {since_date} to {today}: {total}")
             return total
         except Exception as e:
             print(f"Failed to fetch Cloudflare stats: {e}")
@@ -164,12 +167,12 @@ async def collect_stats(
         stats = json.loads(stats_file.read_text())
     else:
         stats = {
-            "visitors": 0,
+            "pageviews": 0,
             "regenerations": 0,
             "package_size_kb": 0,
             "days_since_incident": None,
             "last_updated": None,
-            "last_visitor_fetch": None,
+            "last_pageview_fetch": None,
         }
 
     # Get environment variables for API access
@@ -178,11 +181,11 @@ async def collect_stats(
     gh_token = os.environ.get("GITHUB_TOKEN", "")
     gh_repo = os.environ.get("GITHUB_REPOSITORY", "")
 
-    # Fetch new visitors and add to cumulative total
-    new_visitors = await fetch_cloudflare_visitors(
-        cf_zone_id, cf_api_token, stats.get("last_visitor_fetch")
+    # Fetch new pageviews and add to cumulative total
+    new_pageviews = await fetch_cloudflare_pageviews(
+        cf_zone_id, cf_api_token, stats.get("last_pageview_fetch")
     )
-    stats["visitors"] += new_visitors
+    stats["pageviews"] = stats.get("pageviews", 0) + new_pageviews
 
     # Fetch regeneration count (this is already cumulative from GitHub)
     regenerations = await fetch_github_regenerations(gh_repo, gh_token)
@@ -207,7 +210,7 @@ async def collect_stats(
     # Update timestamps
     now = datetime.now(timezone.utc)
     stats["last_updated"] = now.isoformat()
-    stats["last_visitor_fetch"] = now.strftime("%Y-%m-%d")
+    stats["last_pageview_fetch"] = now.strftime("%Y-%m-%d")
 
     # Save updated stats
     stats_file.write_text(json.dumps(stats, indent=2) + "\n")

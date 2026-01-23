@@ -86,7 +86,7 @@ def main() -> None:
             stats_path=str(stats_path),
         )
     )
-    print(f"  Visitors: {stats['visitors']:,}")
+    print(f"  Pageviews: {stats.get('pageviews', 0):,}")
     print(f"  Regenerations: {stats['regenerations']:,}")
     print(f"  Package size: {stats['package_size_kb']:,} KB")
     if stats.get("days_since_incident") is not None:

@@ -10,9 +10,8 @@
 
     {% if stats %}
     <ul class="stats-list">
-        <li>{{ "{:,}".format(stats.visitors) }} all-time visitors</li>
-        <li>{{ "{:,}".format(stats.regenerations) }} all-time regenerations</li>
-        <li>{{ stats.package_size_kb }}KB last package size</li>
+        <li>{{ "{:,}".format(stats.pageviews) }} total pageviews</li>
+        <li>{{ "{:,}".format(stats.regenerations) }} regenerations</li>
         <li>{% if stats.days_since_incident is not none %}{{ stats.days_since_incident }} days since last incident{% else %}no incidents recorded{% endif %}</li>
     </ul>
     {% endif %}
