@@ -48,7 +48,7 @@ def main() -> None:
     batch_start = 0
     batch_size = 30
 
-    while len(final_stories) < 25 and batch_start < len(stories):
+    while len(final_stories) < 30 and batch_start < len(stories):
         batch = stories[batch_start : batch_start + batch_size]
         batch_with_content = asyncio.run(fetch_all_articles(batch))
 
@@ -58,7 +58,7 @@ def main() -> None:
                     continue
                 source_counts[story.source] = source_counts.get(story.source, 0) + 1
                 final_stories.append(story)
-                if len(final_stories) >= 25:
+                if len(final_stories) >= 30:
                     break
 
         batch_start += batch_size
