@@ -308,10 +308,10 @@ footer p {
         margin: 0 15px 15px 15px;
     }
     .logo-large {
-        display: block;
+        display: none;
     }
     .logo-medium {
-        display: none;
+        display: block;
     }
     .logo-small {
         display: none;
