@@ -11,7 +11,7 @@
             <li>✿&#xFE0E; {{ "{:,}".format(stats.pageviews) }} pageviews ☘&#xFE0E;</li>
             <li>{{ "{:,}".format(stats.regenerations) }} regenerations <span style="font-size: .8em;">♻&#xFE0E;</span></li>
             <li>{{ sources|length }} ingested news sources ⚘&#xFE0E;</li>
-            <li>{% if stats.days_since_incident is not none %}{{ stats.days_since_incident }} days since last incident{% else %}no incidents recorded{% endif %} ✝&#xFE0E;</li>
+            <li>{% if stats.days_since_incident is not none %}{{ stats.days_since_incident }} {{ 'day' if stats.days_since_incident == 1 else 'days' }} since last incident{% else %}no incidents recorded{% endif %} ✝&#xFE0E;</li>
         </ul>
     {% endif %}
 
