@@ -338,6 +338,7 @@ footer p {
     .meta {
         font-size: 3.5rem;
         line-height: 3.8rem;
+        font-weight: 400;
     }
     .content {
         font-size: 3.5rem;
