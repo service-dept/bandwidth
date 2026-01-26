@@ -262,8 +262,8 @@ footer p {
         margin: 10px;
     }
     .meta {
-        font-size: 2rem;
-        line-height: 2rem;
+        font-size: 2.4rem;
+        line-height: 2.6rem;
         flex-direction: column;
         margin: 5px 10px 10px 10px;
     }
@@ -277,8 +277,8 @@ footer p {
         margin: 0 0 10px 0;
     }
     .actions {
-        font-size: 2rem;
-        line-height: 2rem;
+        font-size: 2.4rem;
+        line-height: 2.6rem;
         margin: 0 10px 10px 10px;
     }
     .logo-large {
@@ -310,16 +310,16 @@ footer p {
         border-top: 3px solid #fff;
     }
     article h2 {
-        font-size: 4rem;
-        line-height: 3.8rem;
+        font-size: 4.5rem;
+        line-height: 4.1rem;
         margin: 15px 15px 5px 15px;
     }
     footer {
         margin: 15px;
     }
     .meta {
-        font-size: 2.5rem;
-        line-height: 2.5rem;
+        font-size: 3.5rem;
+        line-height: 3.8rem;
     }
     .content {
         font-size: 3.5rem;
@@ -328,8 +328,8 @@ footer p {
         border-top: 3px solid #fff;
     }
     .actions {
-        font-size: 2.5rem;
-        line-height: 2.5rem;
+        font-size: 3.5rem;
+        line-height: 3.8rem;
         margin: 0 15px 15px 15px;
     }
     .logo-large {
@@ -359,8 +359,8 @@ footer p {
         margin: 15px;
     }
     .meta {
-        font-size: 3rem;
-        line-height: 3rem;
+        font-size: 3.5rem;
+        line-height: 3.8rem;
     }
     .content {
         font-size: 3.5rem;
@@ -368,12 +368,9 @@ footer p {
         padding: 5px 15px 15px 15px;
         border-top: 4px solid #fff;
     }
-    /* .subheading {
-        border-bottom: 4px solid #fff;
-    } */
     .actions {
-        font-size: 3rem;
-        line-height: 3rem;
+        font-size: 3.5rem;
+        line-height: 3.8rem;
         margin: 0 15px 15px 15px;
     }
     .logo-large {
