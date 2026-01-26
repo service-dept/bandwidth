@@ -102,6 +102,7 @@ article:has(+ article:hover) {
 .source-list li {
     display: inline;
     margin: 0;
+    white-space: nowrap;
 }
 
 .source-list li::after {
