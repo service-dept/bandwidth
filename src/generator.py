@@ -44,7 +44,7 @@ def create_environment(templates_path: str) -> Environment:
     )
 
     def format_date(dt: datetime) -> str:
-        return dt.strftime("%B %d, %Y")
+        return dt.strftime("%b %d, %Y")
 
     def format_time(dt: datetime) -> str:
         return dt.strftime("%H:%M UTC")
