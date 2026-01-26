@@ -168,12 +168,14 @@ def calculate_package_size(output_path: str) -> int:
 async def collect_stats(
     output_path: str,
     stats_path: str,
+    seed_path: str | None = None,
 ) -> dict:
     """Collect and update cumulative statistics.
 
     Args:
         output_path: Path to the generated output directory
         stats_path: Path to stats.json file
+        seed_path: Path to seed stats file (optional)
 
     Returns:
         Updated stats dictionary
@@ -181,11 +183,11 @@ async def collect_stats(
     # TODO: Add defensive parsing; corrupted stats.json currently crashes the run
     # Load existing stats, falling back to seed file if stats.json doesn't exist
     stats_file = Path(stats_path)
-    seed_file = stats_file.parent / "config" / "stats.seed.json"
+    seed_file = Path(seed_path) if seed_path else None
 
     if stats_file.exists():
         stats = json.loads(stats_file.read_text())
-    elif seed_file.exists():
+    elif seed_file and seed_file.exists():
         stats = json.loads(seed_file.read_text())
     else:
         stats = {

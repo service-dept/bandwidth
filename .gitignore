@@ -1,9 +1,6 @@
 # Output
 output/
 
-# Live stats (server-managed via GitHub Actions cache)
-/stats.json
-
 # Logo state
 static/logos/.logo_index
 

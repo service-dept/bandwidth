@@ -22,7 +22,7 @@ jobs:
       - name: Restore stats cache
         uses: actions/cache/restore@v4
         with:
-          path: stats.json
+          path: /tmp/bandwidth-stats.json
           key: stats-
           restore-keys: |
             stats-
@@ -48,7 +48,7 @@ jobs:
       - name: Save stats cache
         uses: actions/cache/save@v4
         with:
-          path: stats.json
+          path: /tmp/bandwidth-stats.json
           key: stats-${{ github.run_id }}
 
       - name: Deploy to Cloudflare Pages

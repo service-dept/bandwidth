@@ -1,6 +1,7 @@
 """Main entry point for bandwidth aggregator."""
 
 import asyncio
+import os
 from pathlib import Path
 
 from .deduplicator import deduplicate, sort_by_date, take_top
@@ -24,7 +25,8 @@ def main() -> None:
     templates_path = root / "templates"
     static_path = root / "static"
     output_path = root / "output"
-    stats_path = root / "stats.json"
+    stats_path = Path(os.environ.get("STATS_PATH", "/tmp/bandwidth-stats.json"))
+    stats_seed_path = root / "config" / "stats.seed.json"
 
     print("bandwidth aggregator")
     print("=" * 40)
@@ -84,6 +86,7 @@ def main() -> None:
         collect_stats(
             output_path=str(output_path),
             stats_path=str(stats_path),
+            seed_path=str(stats_seed_path),
         )
     )
     print(f"  Pageviews: {stats.get('pageviews', 0):,}")
