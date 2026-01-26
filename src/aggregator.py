@@ -14,6 +14,9 @@ from .stats import collect_stats
 # Minimum content length in characters (filters out video-only posts, etc.)
 MIN_CONTENT_LENGTH = 500
 
+# Maximum stories per source to ensure diversity
+MAX_PER_SOURCE = 3
+
 
 def get_project_root() -> Path:
     """Get the project root directory."""
@@ -55,6 +58,7 @@ def main() -> None:
     # Fetch content and filter out empty articles, maintaining 25 stories
     print("\n5. Fetching article content...")
     final_stories = []
+    source_counts: dict[str, int] = {}
     batch_start = 0
     batch_size = 30  # Fetch extra to account for failures
 
@@ -64,6 +68,10 @@ def main() -> None:
 
         for story in batch_with_content:
             if story.content and len(story.content) >= MIN_CONTENT_LENGTH:
+                # Enforce per-source limit for diversity
+                if source_counts.get(story.source, 0) >= MAX_PER_SOURCE:
+                    continue
+                source_counts[story.source] = source_counts.get(story.source, 0) + 1
                 final_stories.append(story)
                 if len(final_stories) >= 25:
                     break

@@ -6,7 +6,8 @@ from pathlib import Path
 
 import yaml
 
-from src.deduplicator import deduplicate, sort_by_date, take_top
+from src.aggregator import MAX_PER_SOURCE, MIN_CONTENT_LENGTH
+from src.deduplicator import deduplicate, sort_by_date
 from src.fetcher import fetch_all_feeds
 from src.parser import parse_all_feeds
 from src.scraper import fetch_all_articles
@@ -36,15 +37,34 @@ def main() -> None:
     stories = deduplicate(stories)
     print(f"  Unique: {len(stories)} stories")
 
-    # Sort and take top 25
-    print("\n4. Sorting and selecting top 25...")
+    # Sort by date
+    print("\n4. Sorting by date...")
     stories = sort_by_date(stories)
-    stories = take_top(stories, 25)
-    print(f"  Selected: {len(stories)} stories")
 
-    # Fetch full article content
+    # Fetch content and select top 25 with source diversity
     print("\n5. Fetching article content...")
-    stories = asyncio.run(fetch_all_articles(stories))
+    final_stories = []
+    source_counts: dict[str, int] = {}
+    batch_start = 0
+    batch_size = 30
+
+    while len(final_stories) < 25 and batch_start < len(stories):
+        batch = stories[batch_start : batch_start + batch_size]
+        batch_with_content = asyncio.run(fetch_all_articles(batch))
+
+        for story in batch_with_content:
+            if story.content and len(story.content) >= MIN_CONTENT_LENGTH:
+                if source_counts.get(story.source, 0) >= MAX_PER_SOURCE:
+                    continue
+                source_counts[story.source] = source_counts.get(story.source, 0) + 1
+                final_stories.append(story)
+                if len(final_stories) >= 25:
+                    break
+
+        batch_start += batch_size
+
+    stories = final_stories
+    print(f"  Selected: {len(stories)} stories with content")
 
     # Load sources
     with open(sources_path) as f:
