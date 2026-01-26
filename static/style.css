@@ -110,8 +110,7 @@ article:has(+ article:hover) {
 }
 
 .source-list li:last-of-type::after {
-    content: ".";
-    margin: 0 0 0 -9px;
+    content: "";
 }
 
 .source-list li:last-of-type::before {
@@ -120,7 +119,7 @@ article:has(+ article:hover) {
 
 .source-list {
     padding: 0;
-    margin: 0 0 .5em 0;
+    margin: 0 0 20px 0;
 }
 
 .source-list a {
@@ -134,7 +133,7 @@ article:has(+ article:hover) {
 
 .stats-list {
     padding: 0;
-    margin: 0 0 .5em 0;
+    margin: 0 0 20px 0;
     text-transform: capitalize;
 }
 
@@ -160,7 +159,7 @@ article:has(+ article:hover) {
 }
 
 .content p {
-    margin: 0 0 .5em 0;
+    margin: 0 0 20px 0;
 }
 
 .content p:last-child {
@@ -248,8 +247,8 @@ footer p {
         border-top: 2px solid #fff;
     }
     article h2 {
-        font-size: 2.5rem;
-        line-height: 2.1rem;
+        font-size: 3.5rem;
+        line-height: 3.1rem;
         /* text-align: left;
         text-align-last: left; */
         margin: 10px 10px 5px 10px;
@@ -264,10 +263,13 @@ footer p {
         margin: 5px 10px 10px 10px;
     }
     .content {
-        font-size: 2rem;
-        line-height: 2rem;
+        font-size: 2.4rem;
+        line-height: 2.6rem;
         padding: 10px;
         border-top: 2px solid #fff;
+    }
+    .content p {
+        margin: 0 0 10px 0;
     }
     .actions {
         font-size: 2rem;
@@ -282,6 +284,10 @@ footer p {
     }
     .logo-small {
         display: block;
+    }
+    .source-list a {
+        text-decoration-thickness: 2px;
+        text-underline-offset: 6px;
     }
 }
 
@@ -305,8 +311,8 @@ footer p {
         line-height: 2.5rem;
     }
     .content {
-        font-size: 2.5rem;
-        line-height: 2.5rem;
+        font-size: 3.5rem;
+        line-height: 3.8rem;
         padding: 15px;
         border-top: 3px solid #fff;
     }
@@ -347,8 +353,8 @@ footer p {
     }
     .content {
         font-size: 3.5rem;
-        line-height: 3.5rem;
-        padding: 15px;
+        line-height: 3.8rem;
+        padding: 5px 15px 15px 15px;
         border-top: 4px solid #fff;
     }
     /* .subheading {
