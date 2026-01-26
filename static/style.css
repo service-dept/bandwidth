@@ -47,7 +47,7 @@ nav a {
     margin-right: 1rem;
 }
 
-article:first-of-type:hover {
+article:first-of-type:has(.article-link:hover) {
     border-top-color: red;
 }
 
@@ -73,16 +73,11 @@ article h2 {
     color: red;
 }
 
-article:hover {
+article:has(.article-link:hover) {
     border-bottom-color: red;
 }
 
-article:hover h2,
-article:hover .meta {
-    color: red;
-}
-
-article:hover .content {
+article:has(.article-link:hover) .content {
     border-top-color: red;
 }
 
@@ -92,7 +87,8 @@ article:has(+ article:hover) {
 
 .meta {
     color: #fff;
-    margin: 5px 15px 15px 15px;
+    margin: 5px 15px 0 15px;
+    padding: 0 0 15px 0;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -232,13 +228,16 @@ footer p {
         margin: 10px 10px 5px 10px;
     }
     footer {
+        font-size: 3.5rem;
+        line-height: 3.1rem;
         margin: 10px;
     }
     .meta {
         font-size: 2.4rem;
         line-height: 2.6rem;
         flex-direction: column;
-        margin: 5px 10px 10px 10px;
+        margin: 5px 10px 0 10px;
+        padding-bottom: 10px;
     }
     .content {
         font-size: 2.4rem;
@@ -288,11 +287,14 @@ footer p {
         margin: 15px 15px 5px 15px;
     }
     footer {
+        font-size: 4.5rem;
+        line-height: 4.1rem;
         margin: 15px;
     }
     .meta {
         font-size: 3.5rem;
         line-height: 3.8rem;
+        padding-bottom: 15px;
     }
     .content {
         font-size: 3.5rem;
@@ -329,6 +331,8 @@ footer p {
         margin: 15px 15px 5px 15px;
     }
     footer {
+        font-size: 6rem;
+        line-height: 4.8rem;
         margin: 15px;
     }
     .meta {
