@@ -50,7 +50,7 @@ def create_environment(templates_path: str) -> Environment:
         return dt.strftime("%H:%M UTC")
 
     def format_datetime(dt: datetime) -> str:
-        return dt.strftime("%Y-%m-%d %H:%M UTC")
+        return dt.strftime("%b %d %Y %H:%M UTC")
 
     def format_iso(dt: datetime) -> str:
         return dt.isoformat()
