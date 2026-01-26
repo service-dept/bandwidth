@@ -20,11 +20,6 @@ sources:
     homepage: https://www.democracynow.org
     type: rss
 
-  - name: Texas Tribune
-    url: https://feeds.texastribune.org/feeds/main
-    homepage: https://www.texastribune.org
-    type: rss
-
   # Non-profit Investigative Journalism
   - name: ProPublica
     url: https://www.propublica.org/feeds/propublica/main
