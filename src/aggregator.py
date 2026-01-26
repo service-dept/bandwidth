@@ -11,6 +11,9 @@ from .parser import parse_all_feeds
 from .scraper import fetch_all_articles
 from .stats import collect_stats
 
+# Minimum content length in characters (filters out video-only posts, etc.)
+MIN_CONTENT_LENGTH = 500
+
 
 def get_project_root() -> Path:
     """Get the project root directory."""
@@ -60,7 +63,7 @@ def main() -> None:
         batch_with_content = asyncio.run(fetch_all_articles(batch))
 
         for story in batch_with_content:
-            if story.content:
+            if story.content and len(story.content) >= MIN_CONTENT_LENGTH:
                 final_stories.append(story)
                 if len(final_stories) >= 25:
                     break

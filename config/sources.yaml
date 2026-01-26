@@ -89,6 +89,7 @@ sources:
     url: https://www.bellingcat.com/feed/
     homepage: https://www.bellingcat.com
     type: rss
+    content_start_pattern: "join Bellingcat['\\u2018\\u2019]s WhatsApp channel"
     content_end_pattern: "Bellingcat is a non-profit"
 
   - name: Nonprofit Quarterly

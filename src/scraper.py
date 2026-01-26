@@ -52,10 +52,35 @@ def load_source_config() -> dict[str, dict]:
     return _source_patterns
 
 
-def clean_content(html: str, source_name: str | None = None) -> str:
+def strip_duplicate_headline(html: str, title: str | None = None) -> str:
+    """Remove first paragraph/subheading if it duplicates the article title."""
+    if not html or not title:
+        return html
+
+    # Normalize title for comparison
+    normalized_title = re.sub(r'\s+', ' ', title.strip().lower())
+
+    # Check if first element is a subheading or paragraph that matches title
+    match = re.match(r'^<p[^>]*class="subheading"[^>]*>(.*?)</p>', html, re.IGNORECASE | re.DOTALL)
+    if not match:
+        match = re.match(r'^<p[^>]*>(.*?)</p>', html, re.IGNORECASE | re.DOTALL)
+
+    if match:
+        first_text = re.sub(r'<[^>]+>', '', match.group(1))  # Strip any inner tags
+        first_text = re.sub(r'\s+', ' ', first_text.strip().lower())
+        if first_text == normalized_title:
+            html = html[match.end():].strip()
+
+    return html
+
+
+def clean_content(html: str, source_name: str | None = None, title: str | None = None) -> str:
     """Remove promotional content from article HTML using source-specific patterns."""
     if not html:
         return html
+
+    # Remove duplicate headline first
+    html = strip_duplicate_headline(html, title)
 
     source_cfg = {}
     if source_name:
@@ -118,7 +143,7 @@ async def fetch_article_html(client: httpx.AsyncClient, url: str) -> str | None:
         return None
 
 
-def extract_content(html: str, source_name: str | None = None) -> str | None:
+def extract_content(html: str, source_name: str | None = None, title: str | None = None) -> str | None:
     """Extract main article content from HTML using trafilatura."""
     if not html:
         return None
@@ -147,8 +172,8 @@ def extract_content(html: str, source_name: str | None = None) -> str | None:
     # Convert heading tags to paragraphs with class for easier styling
     content = re.sub(r'<h[1-6][^>]*>', '<p class="subheading">', content)
     content = re.sub(r'</h[1-6]>', '</p>', content)
-    # Remove promotional content using source-specific patterns
-    content = clean_content(content, source_name)
+    # Remove promotional content and duplicate headlines
+    content = clean_content(content, source_name, title)
     return content
 
 
@@ -167,7 +192,7 @@ async def fetch_article_content(
         loop = asyncio.get_running_loop()
         content = await loop.run_in_executor(
             executor,
-            lambda: extract_content(html, story.source),
+            lambda: extract_content(html, story.source, story.title),
         )
         return content
     except Exception:

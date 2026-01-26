@@ -294,6 +294,12 @@ footer p {
         text-decoration-thickness: 2px;
         text-underline-offset: 6px;
     }
+    .stats-list {
+        margin: 0 0 10px 0;
+    }
+    .source-list {
+        margin: 0 0 10px 0;
+    }
 }
 
 @media screen and (min-width: 900px) and (max-width: 1299px) {
