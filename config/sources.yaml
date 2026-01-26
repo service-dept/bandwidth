@@ -3,21 +3,27 @@
 
 sources:
   # Non-profit / Public Media
-  # - name: NPR News
-  #   url: https://feeds.npr.org/1001/rss.xml
-  #   type: rss
+  - name: NPR News
+    url: https://feeds.npr.org/1001/rss.xml
+    homepage: https://www.npr.org
+    type: rss
 
-  # - name: PBS NewsHour
-  #   url: https://www.pbs.org/newshour/feeds/rss/headlines
-  #   type: rss
+  - name: PBS NewsHour
+    url: https://www.pbs.org/newshour/feeds/rss/headlines
+    homepage: https://www.pbs.org/newshour
+    type: rss
+    extraction_mode: recall
+    content_end_pattern: "Support trusted journalism and civil dialogue."
 
-  # - name: Democracy Now
-  #   url: https://www.democracynow.org/democracynow.rss
-  #   type: rss
+  - name: Democracy Now
+    url: https://www.democracynow.org/democracynow.rss
+    homepage: https://www.democracynow.org
+    type: rss
 
-  # - name: Texas Tribune
-  #   url: https://feeds.texastribune.org/feeds/main
-
+  - name: Texas Tribune
+    url: https://feeds.texastribune.org/feeds/main
+    homepage: https://www.texastribune.org
+    type: rss
 
   # Non-profit Investigative Journalism
   - name: ProPublica
@@ -47,9 +53,10 @@ sources:
     homepage: https://globalvoices.org
     type: rss
 
-  # - name: Common Dreams
-  #   url: https://www.commondreams.org/feeds/news.rss
-  #   type: rss
+  - name: Common Dreams
+    url: https://www.commondreams.org/feeds/news.rss
+    homepage: https://www.commondreams.org
+    type: rss
 
   - name: Truthout
     url: https://truthout.org/feed/
@@ -83,14 +90,39 @@ sources:
     type: rss
     content_end_pattern: "Bellingcat is a non-profit"
 
-  # Wikinews removed - Wikimedia blocks Python HTTP clients via TLS fingerprinting
-  # - name: Wikinews
-  #   url: https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom
-  #   homepage: https://en.wikinews.org
-  #   type: atom
-
   - name: Nonprofit Quarterly
     url: https://nonprofitquarterly.org/feed/
     homepage: https://nonprofitquarterly.org
     type: rss
     content_end_pattern: "For More on This Topic:"
+
+  # New sources
+  - name: Colorlines
+    url: https://feeds2.feedburner.com/racewireblog
+    homepage: https://colorlines.com/
+    type: rss
+
+  - name: ZNetwork
+    url: https://znetwork.org/feed/?post_type=znetarticle
+    homepage: https://znetwork.org
+    type: rss
+
+  - name: The 19th
+    url: https://19thnews.org/feed/
+    homepage: https://19thnews.org/
+    type: rss
+
+  - name: Jacobin
+    url: https://jacobin.com/feed/
+    homepage: https://jacobin.com/
+    type: rss
+
+  - name: CounterPunch
+    url: https://www.counterpunch.org/feed/
+    homepage: https://www.counterpunch.org/
+    type: rss
+  
+  - name: The Marshall Project
+    url: https://www.themarshallproject.org/rss/recent.rss
+    homepage: https://www.themarshallproject.org
+    type: rss

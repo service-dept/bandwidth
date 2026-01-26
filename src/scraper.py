@@ -18,8 +18,8 @@ from .parser import Story
 _source_patterns: dict[str, str] | None = None
 
 
-def load_source_patterns() -> dict[str, list[str]]:
-    """Load content_end_pattern mappings from sources.yaml."""
+def load_source_config() -> dict[str, dict]:
+    """Load source-specific config from sources.yaml."""
     global _source_patterns
     if _source_patterns is not None:
         return _source_patterns
@@ -30,12 +30,20 @@ def load_source_patterns() -> dict[str, list[str]]:
 
     _source_patterns = {}
     for source in config.get("sources", []):
+        source_config = {}
+
+        # Content end patterns
         if "content_end_patterns" in source:
-            # List of patterns
-            _source_patterns[source["name"]] = source["content_end_patterns"]
+            source_config["patterns"] = source["content_end_patterns"]
         elif "content_end_pattern" in source:
-            # Single pattern (backwards compatible)
-            _source_patterns[source["name"]] = [source["content_end_pattern"]]
+            source_config["patterns"] = [source["content_end_pattern"]]
+
+        # Extraction mode (precision or recall)
+        if "extraction_mode" in source:
+            source_config["extraction_mode"] = source["extraction_mode"]
+
+        if source_config:
+            _source_patterns[source["name"]] = source_config
 
     return _source_patterns
 
@@ -47,8 +55,9 @@ def clean_content(html: str, source_name: str | None = None) -> str:
 
     patterns = []
     if source_name:
-        all_patterns = load_source_patterns()
-        patterns = all_patterns.get(source_name, [])
+        config = load_source_config()
+        source_cfg = config.get(source_name, {})
+        patterns = source_cfg.get("patterns", [])
 
     if not patterns:
         return html
@@ -97,12 +106,21 @@ def extract_content(html: str, source_name: str | None = None) -> str | None:
     """Extract main article content from HTML using trafilatura."""
     if not html:
         return None
+
+    # Check for source-specific extraction mode
+    use_recall = False
+    if source_name:
+        config = load_source_config()
+        source_cfg = config.get(source_name, {})
+        use_recall = source_cfg.get("extraction_mode") == "recall"
+
     content = trafilatura.extract(
         html,
         include_comments=False,
         include_tables=False,
         no_fallback=False,
-        favor_precision=True,
+        favor_precision=not use_recall,
+        favor_recall=use_recall,
         output_format="html",
     )
     if not content:
