@@ -4,7 +4,7 @@
 
 {% block content %}
 <article class="content">
-    <p>...is a data-accessible news aggregator featuring only the most trusted independent, non-profit, and open-source publishers.</p>
+    <p>Bandwidth is a data-accessible news aggregator featuring only the most trusted independent, non-profit, and open-source publishers.</p>
 
     {% if stats %}
         <ul class="stats-list">
@@ -15,9 +15,7 @@
         </ul>
     {% endif %}
 
-    <p>We collect no personal information, usage patterns, or identifying data. We use no client-side JavaScript, images, cookies, or tracking pixels. W.Y.S.I.W.Y.G.</p>
-        
-    <p>Here's how it works: every 10 minutes, a cron job triggers a series of Python scripts that scrape, dedupe, and collate the latest 25 news stories from a curated collection of RSS feeds and public APIs. Another Python script transforms that scraped data into a small (~500K) payload of pure HTML and CSS and uploads it to a server.</p>
+    <p>Here's how it works: every 10 minutes, we fetch the latest stories from our list of sources* and generate a static bundle of pure HTML and CSS. We collect no personal information, usage patterns, or identifying data. We use no client-side JavaScript, images, cookies, or tracking pixels. W.Y.S.I.W.Y.G.</p>
 
     <ul class="source-list">
         {% for source in sources %}
@@ -26,7 +24,5 @@
         </li>
         {% endfor %}
     </ul>
-
-    <p>Want to suggest a source? Need to report a bug? Dare to file a complaint? Send a message to admin@bandwidth.click and we'll get back to you in the order your call was received.</p>
 </article>
 {% endblock %}
