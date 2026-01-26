@@ -31,7 +31,7 @@ ROOT = DEV_DIR.parent
 TEMPLATES_PATH = ROOT / "templates"
 STATIC_PATH = ROOT / "static"
 OUTPUT_PATH = ROOT / "output"
-SAMPLE_DATA_PATH = DEV_DIR / "sample_data.json"
+SAMPLE_DATA_PATH = DEV_DIR / "sample_data_all_sources.json"
 SOURCES_PATH = ROOT / "config" / "sources.yaml"
 SAMPLE_STATS_PATH = DEV_DIR / "sample_stats.json"
 

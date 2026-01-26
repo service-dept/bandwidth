@@ -34,6 +34,7 @@ sources:
     url: https://theintercept.com/feed/?rss
     homepage: https://theintercept.com
     type: rss
+    content_end_pattern: "IT['\u2018\u2019]S EVEN WORSE THAN WE THOUGHT"
 
   - name: Center for Public Integrity
     url: https://publicintegrity.org/feed/
@@ -54,6 +55,9 @@ sources:
     url: https://truthout.org/feed/
     homepage: https://truthout.org
     type: rss
+    content_end_patterns:
+      - "Truthout has launched a fundraiser"
+      - "We appeal for your support"
 
   # Additional Non-profit Investigative
   - name: Reveal
@@ -70,19 +74,23 @@ sources:
     url: https://insideclimatenews.org/feed/
     homepage: https://insideclimatenews.org
     type: rss
+    content_end_pattern: "About This Story"
 
   # Open Source / Citizen Journalism
   - name: Bellingcat
     url: https://www.bellingcat.com/feed/
     homepage: https://www.bellingcat.com
     type: rss
+    content_end_pattern: "Bellingcat is a non-profit"
 
-  - name: Wikinews
-    url: https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom
-    homepage: https://en.wikinews.org
-    type: atom
+  # Wikinews removed - Wikimedia blocks Python HTTP clients via TLS fingerprinting
+  # - name: Wikinews
+  #   url: https://en.wikinews.org/w/index.php?title=Special:NewsFeed&feed=atom
+  #   homepage: https://en.wikinews.org
+  #   type: atom
 
   - name: Nonprofit Quarterly
     url: https://nonprofitquarterly.org/feed/
     homepage: https://nonprofitquarterly.org
     type: rss
+    content_end_pattern: "For More on This Topic:"

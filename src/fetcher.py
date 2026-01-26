@@ -8,6 +8,11 @@ from dataclasses import dataclass
 import httpx
 import yaml
 
+USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+)
+
 
 @dataclass
 class FeedResult:
@@ -41,11 +46,11 @@ async def fetch_all_feeds(sources_path: str) -> list[FeedResult]:
     sources = config.get("sources", [])
 
     # TODO: Validate required fields (name, url) to avoid KeyError crashes
-    async with httpx.AsyncClient(timeout=5.0) as client:
+    async with httpx.AsyncClient(timeout=5.0, headers={"User-Agent": USER_AGENT}) as client:
         tasks = [
             fetch_feed(client, source["name"], source["url"])
             for source in sources
-            if source.get("type") == "rss"
+            if source.get("type") in ("rss", "atom")  # atom kept for future use
         ]
         results = await asyncio.gather(*tasks)
 
