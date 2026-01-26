@@ -104,11 +104,6 @@ sources:
     homepage: https://znetwork.org
     type: rss
 
-  - name: The 19th
-    url: https://19thnews.org/feed/
-    homepage: https://19thnews.org/
-    type: rss
-
   - name: Jacobin
     url: https://jacobin.com/feed/
     homepage: https://jacobin.com/
