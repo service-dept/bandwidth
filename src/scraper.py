@@ -32,7 +32,11 @@ def load_source_config() -> dict[str, dict]:
     for source in config.get("sources", []):
         source_config = {}
 
-        # Content end patterns
+        # Content start pattern (trim leading cruft)
+        if "content_start_pattern" in source:
+            source_config["start_pattern"] = source["content_start_pattern"]
+
+        # Content end patterns (trim trailing cruft)
         if "content_end_patterns" in source:
             source_config["patterns"] = source["content_end_patterns"]
         elif "content_end_pattern" in source:
@@ -53,31 +57,43 @@ def clean_content(html: str, source_name: str | None = None) -> str:
     if not html:
         return html
 
-    patterns = []
+    source_cfg = {}
     if source_name:
         config = load_source_config()
         source_cfg = config.get(source_name, {})
-        patterns = source_cfg.get("patterns", [])
 
-    if not patterns:
-        return html
+    # Handle content_start_pattern - trim everything before and including the LAST match
+    start_pattern = source_cfg.get("start_pattern")
+    if start_pattern:
+        matches = list(re.finditer(start_pattern, html, re.IGNORECASE))
+        if matches:
+            last_match = matches[-1]
+            # Find the next paragraph after the last match
+            next_p = html.find('<p', last_match.end())
+            if next_p > 0:
+                html = html[next_p:]
+            else:
+                html = html[last_match.end():]
+            html = html.strip()
 
-    # Find earliest match across all patterns
-    earliest_pos = len(html)
-    for pattern in patterns:
-        match = re.search(pattern, html, re.IGNORECASE)
-        if match and match.start() < earliest_pos:
-            earliest_pos = match.start()
+    # Handle content_end_pattern(s) - trim everything after the match
+    end_patterns = source_cfg.get("patterns", [])
+    if end_patterns:
+        earliest_pos = len(html)
+        for pattern in end_patterns:
+            match = re.search(pattern, html, re.IGNORECASE)
+            if match and match.start() < earliest_pos:
+                earliest_pos = match.start()
 
-    if earliest_pos < len(html):
-        html = html[:earliest_pos]
+        if earliest_pos < len(html):
+            html = html[:earliest_pos]
 
-        # Clean up: remove any incomplete trailing paragraph
-        last_p_close = html.rfind('</p>')
-        if last_p_close > 0:
-            html = html[:last_p_close + 4]
+            # Clean up: remove any incomplete trailing paragraph
+            last_p_close = html.rfind('</p>')
+            if last_p_close > 0:
+                html = html[:last_p_close + 4]
 
-        html = html.strip()
+            html = html.strip()
 
     return html
 

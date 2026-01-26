@@ -18,7 +18,7 @@
     <p>Here's how it works: every 10 minutes, we fetch the latest stories from our list of sources* and generate a static bundle of pure HTML and CSS. We collect no personal information, usage patterns, or identifying data. We use no client-side JavaScript, images, cookies, or tracking pixels. W.Y.S.I.W.Y.G.</p>
 
     <ul class="source-list">
-        {% for source in sources %}
+        {% for source in sources|sort(attribute='name') %}
         <li>
             <a href="{{ source.homepage }}">{{ source.name }}</a>
         </li>

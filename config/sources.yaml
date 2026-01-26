@@ -57,6 +57,7 @@ sources:
     url: https://www.commondreams.org/feeds/news.rss
     homepage: https://www.commondreams.org
     type: rss
+    content_start_pattern: "delivered straight to your inbox\\.</p>"
 
   - name: Truthout
     url: https://truthout.org/feed/
