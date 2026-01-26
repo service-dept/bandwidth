@@ -102,15 +102,15 @@ article:has(+ article:hover) {
 .source-list li {
     display: inline;
     margin: 0;
-    white-space: nowrap;
 }
 
-.source-list li::after {
+.source-list a::after {
     content: ",";
-    margin: 0 0 0 -6px;
+    display: inline-block;
+    margin-left: 3px;
 }
 
-.source-list li:last-of-type::after {
+.source-list li:last-of-type a::after {
     content: ".";
 }
 
