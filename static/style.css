@@ -181,34 +181,6 @@ article:has(+ article:hover) {
     font-weight: 400;
 }
 
-.actions a {
-    text-decoration: none;
-}
-
-article:hover .actions a {
-    color: red;
-}
-
-article:hover .actions a:hover {
-    color: #fff;
-}
-
-.flower {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.actions a:hover .flower {
-    animation: spin 3s linear infinite;
-}
-
 footer {
     color: #fff;
     font-size: 6.3vw;
