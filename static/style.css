@@ -110,11 +110,16 @@ article:has(+ article:hover) {
 }
 
 .source-list li:last-of-type::after {
-    content: "";
+    content: ".";
 }
 
 .source-list li:last-of-type::before {
     content: "and ";
+}
+
+.source-list li:first-of-type::before {
+    content: "*";
+    margin-right: -5px;
 }
 
 .source-list {
