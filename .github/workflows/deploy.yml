@@ -19,6 +19,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Keep scheduled workflow alive
+        # GitHub disables cron schedules after 60 days without repo activity.
+        # Re-enabling the workflow via the API resets that timer.
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/deploy.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Restore stats cache
         uses: actions/cache/restore@v4
         with:
